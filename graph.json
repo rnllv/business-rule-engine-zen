@@ -1,0 +1,62 @@
+{
+  "contentType": "application/vnd.gorules.decision",
+  "nodes": [
+    {
+      "type": "inputNode",
+      "id": "12a1d9c9-9310-44a2-9675-ef6b4be81a7e",
+      "name": "Request"
+    },
+    {
+      "type": "decisionTableNode",
+      "id": "2f6f1632-4779-45a5-8bbd-82763c0e38b7",
+      "name": "Data Class Type",
+      "content": {
+        "hitPolicy": "first",
+        "executionMode": "loop",
+        "inputField": "rows",
+        "outputPath": "classifications",
+        "inputs": [
+          { "id": "31f1f2f6-d84a-4447-b569-d4703b9a3829", "name": "Input", "field": "field" },
+          { "id": "6f09e564-94c5-408f-9f9b-e8ade0d6f6a6", "name": "New field", "field": "dataClassType" }
+        ],
+        "outputs": [
+          { "id": "f82ece5a-4077-4fe0-ae1d-41075d82b6fa", "name": "Output", "field": "dateClassType" }
+        ],
+        "rules": [
+          { "_id": "r1", "31f1f2f6-d84a-4447-b569-d4703b9a3829": "", "6f09e564-94c5-408f-9f9b-e8ade0d6f6a6": "len($) > 0", "f82ece5a-4077-4fe0-ae1d-41075d82b6fa": "dataClassType" },
+          { "_id": "r2", "31f1f2f6-d84a-4447-b569-d4703b9a3829": "startsWith($,'t_')", "6f09e564-94c5-408f-9f9b-e8ade0d6f6a6": "", "f82ece5a-4077-4fe0-ae1d-41075d82b6fa": "'Table'" },
+          { "_id": "r3", "31f1f2f6-d84a-4447-b569-d4703b9a3829": "startsWith($,'v_')", "6f09e564-94c5-408f-9f9b-e8ade0d6f6a6": "", "f82ece5a-4077-4fe0-ae1d-41075d82b6fa": "'View'" },
+          { "_id": "r4", "31f1f2f6-d84a-4447-b569-d4703b9a3829": "", "6f09e564-94c5-408f-9f9b-e8ade0d6f6a6": "", "f82ece5a-4077-4fe0-ae1d-41075d82b6fa": "'NA'" }
+        ]
+      }
+    },
+    {
+      "type": "decisionTableNode",
+      "id": "bb9fd0e3-c650-44f5-ba2c-9e2575889ddc",
+      "name": "PII",
+      "content": {
+        "hitPolicy": "first",
+        "executionMode": "loop",
+        "inputField": "rows",
+        "outputPath": "pii_results",
+        "inputs": [
+          { "id": "aad10402-891f-4b26-b117-86233d7c63c5", "name": "Input", "field": "field" }
+        ],
+        "outputs": [
+          { "id": "c404390e-b56c-4f4c-9894-598f6cf6bfd8", "name": "Output", "field": "isPii" }
+        ],
+        "rules": [
+          { "_id": "p1", "aad10402-891f-4b26-b117-86233d7c63c5": "contains(lower($), 'social')", "c404390e-b56c-4f4c-9894-598f6cf6bfd8": "true" },
+          { "_id": "p2", "aad10402-891f-4b26-b117-86233d7c63c5": "", "c404390e-b56c-4f4c-9894-598f6cf6bfd8": "false" }
+        ]
+      }
+    },
+    { "type": "outputNode", "id": "0b13175c-72ed-441e-bae7-6d78140253fa", "name": "Response" }
+  ],
+  "edges": [
+    { "id": "e1", "sourceId": "12a1d9c9-9310-44a2-9675-ef6b4be81a7e", "targetId": "2f6f1632-4779-45a5-8bbd-82763c0e38b7" },
+    { "id": "e2", "sourceId": "2f6f1632-4779-45a5-8bbd-82763c0e38b7", "targetId": "0b13175c-72ed-441e-bae7-6d78140253fa" },
+    { "id": "e3", "sourceId": "12a1d9c9-9310-44a2-9675-ef6b4be81a7e", "targetId": "bb9fd0e3-c650-44f5-ba2c-9e2575889ddc" },
+    { "id": "e4", "sourceId": "bb9fd0e3-c650-44f5-ba2c-9e2575889ddc", "targetId": "0b13175c-72ed-441e-bae7-6d78140253fa" }
+  ]
+}
