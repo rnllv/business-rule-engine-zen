@@ -1,0 +1,203 @@
+{
+  "contentType": "application/vnd.gorules.decision",
+  "nodes": [
+    {
+      "type": "inputNode",
+      "id": "inputNode1",
+      "name": "Request",
+      "position": {
+        "x": 55,
+        "y": 185
+      }
+    },
+    {
+      "type": "decisionTableNode",
+      "content": {
+        "hitPolicy": "first",
+        "rules": [
+          {
+            "_id": "dt1-r1",
+            "dt1-i1": "len(trim($)) > 0",
+            "dt1-o1": "d_cls"
+          },
+          {
+            "_id": "dt1-r2",
+            "dt1-i1": "$ == null or trim($) == ''",
+            "dt1-o1": "'derivedVal1'"
+          },
+          {
+            "_id": "dt1-r3",
+            "dt1-i1": "",
+            "dt1-o1": "'derivedVal2'"
+          }
+        ],
+        "inputs": [
+          {
+            "id": "dt1-i1",
+            "name": "Input",
+            "field": "d_cls"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "dt1-o1",
+            "name": "Output",
+            "field": "d_cls_out"
+          }
+        ],
+        "passThrough": false,
+        "inputField": null,
+        "outputPath": null,
+        "executionMode": "single",
+        "passThorough": false
+      },
+      "id": "dcsnTable1",
+      "name": "Dt Class Type",
+      "position": {
+        "x": 410,
+        "y": 70
+      }
+    },
+    {
+      "type": "outputNode",
+      "content": {
+        "schema": ""
+      },
+      "id": "outputNode1",
+      "name": "Response",
+      "position": {
+        "x": 870,
+        "y": 150
+      }
+    },
+    {
+      "type": "decisionTableNode",
+      "content": {
+        "hitPolicy": "first",
+        "rules": [
+          {
+            "_id": "dt2-r1",
+            "dt2-i1": "contains(lower($), 'dob')",
+            "dt2-o1": "'Yes'"
+          },
+          {
+            "_id": "dt2-r2",
+            "dt2-i1": "",
+            "dt2-o1": "'No'"
+          }
+        ],
+        "inputs": [
+          {
+            "id": "dt2-i1",
+            "name": "Input",
+            "field": "pii"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "dt2-o1",
+            "name": "Output",
+            "field": "pii_out"
+          }
+        ],
+        "passThrough": false,
+        "inputField": null,
+        "outputPath": null,
+        "executionMode": "single",
+        "passThorough": false
+      },
+      "id": "dcsnTable2",
+      "name": "PII",
+      "position": {
+        "x": 460,
+        "y": 280
+      }
+    },
+    {
+      "type": "decisionTableNode",
+      "content": {
+        "hitPolicy": "first",
+        "rules": [
+          {
+            "_id": "dt3-r1",
+            "dt3-i1": "$ == null or trim($) == '' and startsWith(lower(tbl), 't_')",
+            "dt3-o1": "'TABLE'"
+          },
+          {
+            "_id": "dt3-r2",
+            "dt3-i1": "$ == null or trim($) == '' and startsWith(lower(tbl), 'v_')",
+            "dt3-o1": "'VIEW'"
+          },
+          {
+            "_id": "dt3-r3",
+            "dt3-i1": "",
+            "dt3-o1": "'NA'"
+          }
+        ],
+        "inputs": [
+          {
+            "id": "dt3-i1",
+            "name": "Input",
+            "field": "ds_type"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "dt3-o1",
+            "name": "Output",
+            "field": "ds_type_out"
+          }
+        ],
+        "passThrough": false,
+        "inputField": null,
+        "outputPath": null,
+        "executionMode": "single",
+        "passThorough": false
+      },
+      "id": "dcsnTable3",
+      "name": "DS Type",
+      "position": {
+        "x": 460,
+        "y": 280
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge1",
+      "sourceId": "inputNode1",
+      "type": "edge",
+      "targetId": "dcsnTable1"
+    },
+    {
+      "id": "edge2",
+      "sourceId": "dcsnTable1",
+      "type": "edge",
+      "targetId": "outputNode1"
+    },
+    {
+      "id": "edge3",
+      "sourceId": "inputNode1",
+      "type": "edge",
+      "targetId": "dcsnTable2"
+    },
+    {
+      "id": "edge4",
+      "sourceId": "dcsnTable2",
+      "type": "edge",
+      "targetId": "outputNode1"
+    },
+    {
+      "id": "edge5",
+      "sourceId": "inputNode1",
+      "type": "edge",
+      "targetId": "dcsnTable3"
+    },
+    {
+      "id": "edge6",
+      "sourceId": "dcsnTable3",
+      "type": "edge",
+      "targetId": "outputNode1"
+    }
+  ]
+}
