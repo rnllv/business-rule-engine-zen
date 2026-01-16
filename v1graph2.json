@@ -17,25 +17,15 @@
         "rules": [
           {
             "_id": "dt1-r1",
-            "dt1-i1": "len(trim($)) > 0",
-            "dt1-o1": "d_cls"
-          },
-          {
-            "_id": "dt1-r2",
             "dt1-i1": "$ == null or trim($) == ''",
             "dt1-o1": "'derivedVal1'"
-          },
-          {
-            "_id": "dt1-r3",
-            "dt1-i1": "",
-            "dt1-o1": "'derivedVal2'"
           }
         ],
         "inputs": [
           {
             "id": "dt1-i1",
             "name": "Input",
-            "field": "d_cls"
+            "field": "data.d_cls"
           }
         ],
         "outputs": [
@@ -77,20 +67,15 @@
         "rules": [
           {
             "_id": "dt2-r1",
-            "dt2-i1": "contains(lower($), 'dob')",
-            "dt2-o1": "'Yes'"
-          },
-          {
-            "_id": "dt2-r2",
-            "dt2-i1": "",
-            "dt2-o1": "'No'"
+            "dt2-i1": "$ == null or trim($) == ''",
+            "dt2-o1": "lkp_clmn_data[data['tbl']]['pii']"
           }
         ],
         "inputs": [
           {
             "id": "dt2-i1",
             "name": "Input",
-            "field": "pii"
+            "field": "data.pii"
           }
         ],
         "outputs": [
@@ -120,12 +105,12 @@
         "rules": [
           {
             "_id": "dt3-r1",
-            "dt3-i1": "$ == null or trim($) == '' and startsWith(lower(tbl), 't_')",
+            "dt3-i1": "$ == null or trim($) == '' and startsWith(lower(data.tbl), 't_')",
             "dt3-o1": "'TABLE'"
           },
           {
             "_id": "dt3-r2",
-            "dt3-i1": "$ == null or trim($) == '' and startsWith(lower(tbl), 'v_')",
+            "dt3-i1": "$ == null or trim($) == '' and startsWith(lower(data.tbl), 'v_')",
             "dt3-o1": "'VIEW'"
           },
           {
@@ -138,7 +123,7 @@
           {
             "id": "dt3-i1",
             "name": "Input",
-            "field": "ds_type"
+            "field": "data.ds_type"
           }
         ],
         "outputs": [

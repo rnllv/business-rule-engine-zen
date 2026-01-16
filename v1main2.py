@@ -13,10 +13,15 @@ def file_loader(file_name: str):
 engine = zen.ZenEngine()
 decision = engine.create_decision(file_loader("v1graph2.json"))
 
+#lookup vars
+lkp_clmn_data = {"T_TEST": {"pii": "yes", "wi": "no"}}
 
 def run_evaluation(payload: dict):
     try:
-        response = decision.evaluate(payload, {"trace": True})
+        updated_payload = {"data": payload} | {"lkp_clmn_data": lkp_clmn_data}
+        print(f"Updated payload: {updated_payload}")
+        response = decision.evaluate(updated_payload, {"trace": True})
+        #print(f"Full response: {response}")
         #pdb.set_trace()
         # Note: Your JSON output field is 'd_cls_out'
         result = response.get("result", {})
@@ -25,9 +30,10 @@ def run_evaluation(payload: dict):
         for match_attrbt, match_val in result.items():
             tgt_key = match_attrbt.replace("_out", "")
             # match key in input_data and update val
-            payload[tgt_key] = match_val
+            if tgt_key in payload:
+                payload[tgt_key] = match_val
 
-        print(f"Updated payload: {payload}")
+        print(f"Final result: {payload}")
 
     except Exception as e:
         print(f"Error: {e}")
@@ -37,7 +43,7 @@ if __name__ == "__main__":
     # Test
     #input_data = {"d_cls": "  ", "ds_type": "tbl1", "pii": "social"}
     #missing input field is considered as null
-    input_data = {"tbl": "T_TEST", "d_cls": "Internal", "ds_type": "", "pii": ""}
+    input_data = {"tbl": "T_TEST", "d_cls": " ", "ds_type": "", "pii": ""}
     print(f"Input data: {input_data}")
     print("-" * 60)
     run_evaluation(input_data)
